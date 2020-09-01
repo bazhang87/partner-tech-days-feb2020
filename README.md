@@ -178,8 +178,9 @@ Does the password have to be in plain text? No, Red Hat Ansible Tower can take c
 
 Go back to the home directory, all the following exercises will be performed in the home directory.
 
+```
 [student1@ansible ~]$ cd ~
-
+```
 #### Section 2 : Quick intro to F5 Load Balancer (15 minutes)
 
 Objective: To cover the basics of a load balancer, in this case an F5 BigIP is used as an example of a load balancer and a network device that Ansible can control and automate.
