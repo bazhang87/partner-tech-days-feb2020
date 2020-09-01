@@ -84,7 +84,7 @@ This command gives you information about the version of Ansible, location of the
 
 Use the cat command to view the contents of the ansible.cfg file.
 
-'''[student1@ansible ~]$ cat ~/.ansible.cfg
+```[student1@ansible ~]$ cat ~/.ansible.cfg
 
 [defaults]
 
@@ -108,7 +108,8 @@ connect_timeout = 200
 
 command_timeout = 200
 
-[student1@ansible ~]$'''
+[student1@ansible ~]$
+```
 
 Note the following parameters within the ansible.cfg file:
 
@@ -120,11 +121,11 @@ The scope of a play within a playbook is limited to the groups of hosts declared
 
 In this lab you will work with a file based inventory written in the ini format. Use the cat command to view the contents of your inventory:
 
-'''[student1@ansible ~]$ cat ~/lab_inventory/hosts'''
+```[student1@ansible ~]$ cat ~/lab_inventory/hosts```
 
 The output will look as follows with student2 being the respective student workbench:
 
-'''node3 ansible_host=54.152.203.104 ansible_user=ec2-user private_ip=172.16.182.197
+```node3 ansible_host=54.152.203.104 ansible_user=ec2-user private_ip=172.16.182.197
 
 node4 ansible_host=100.25.219.137 ansible_user=ec2-user private_ip=172.16.247.51
 
@@ -148,7 +149,8 @@ ansible ansible_host=107.23.192.217 ansible_user=ec2-user private_ip=172.16.207.
 
 host1 ansible_host=107.22.141.4 ansible_user=ec2-user private_ip=172.16.170.190
 
-host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13'''
+host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
+```
 
 Note that the IP addresses will be different in your environment. Notice that node3 and node4 are not in the web group. We will use node3 and node4 in later exercises.
 
@@ -159,9 +161,9 @@ In the above output every [ ] defines a group. For example [web] is a group that
 Note: A group called all always exists and contains all groups and hosts defined within an inventory.
 
 We can associate variables to groups and hosts. Host variables are declared/defined on the same line as the host themselves. For example for the host f5:
-
+```
 f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin
-
+```
 -   f5 - The name that Ansible will use. This can but does not have to rely on DNS
 
 -   ansible_host - The IP address that ansible will use, if not configured it will default to DNS
@@ -185,16 +187,16 @@ Objective: To cover the basics of a load balancer, in this case an F5 BigIP is u
 #### Step 1 - Gather Facts
 
 Using your text editor of choice create a new file called bigip-facts.yml.
-
+```
 [student1@ansible ~]$ nano bigip-facts.yml
-
+```
 vim and nano are available on the control node, as well as Visual Studio
 
 Ansible playbooks are YAML files. YAML is a structured encoding format that is also extremely human readable (unlike it's subset - the JSON format).
 
 Enter the following play definition into bigip-facts.yml:
 
-'''
+```
 ---
 
 - name: GRAB F5 FACTS
@@ -238,7 +240,7 @@ Next, add the first task. This task will use the bigip_device_info module to gra
           validate_certs: no
 
       register: device_facts
-
+```
 A play is a list of tasks. Tasks and modules have a 1:1 correlation. Ansible modules are reusable, standalone scripts that can be used by the Ansible API, or by the ansible or ansible-playbook programs. They return information to ansible by printing a JSON string to stdout before exiting.
 
 -   name: COLLECT BIG-IP FACTS is a user defined description that will display in the terminal output.
@@ -295,11 +297,12 @@ Because the bigip_device_info module returns useful information in structured da
 
 Run the playbook - exit back into the command line of the control host and execute the following:
 
-'''[student1@ansible ~]$ ansible-playbook bigip-facts.yml'''
+```[student1@ansible ~]$ ansible-playbook bigip-facts.yml
+```
 
 The output will look as follows.
 
-'''
+```
 {% raw %}
 
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
@@ -448,26 +451,27 @@ ok: [f5] => {
 
 PLAY RECAP **************************************************************************************************************************************************
 
-f5 : ok=4    changed=1    unreachable=0    failed=0'''
-
+f5 : ok=4    changed=1    unreachable=0    failed=0v
+```
 And finally, please confirm that you have web access to your F5 load balancer. You can find its details in your Ansible inventory file. For example, for the entry below, you would go to [https://34.199.128.69:8443](http://34.199.128.69:8443) (the web interface listens to port 8443), username is admin, password is admin
-'''
+```
 [lb]
 
-f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin'''
+f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin
+```
 
 #### Step 2 - Add nodes
 
 ![](https://lh3.googleusercontent.com/zgXTQFiWu3e9IzWRQFj3uprL16ztn9yxJ2cVEkPyo9cOFxt-rru6y9Q2SkBv0Pb7YMCNtv4x8sInPEjS9eo4_D8y6iHYCzCZagfOM-q1nwKXd_4P-XE9FmlkljbyXT_IcBslktE9)
 
 Using your text editor of choice create a new file called bigip-node.yml.
-
+```
 [student1@ansible ~]$ nano bigip-node.yml
-
+```
 vim and nano are available on the control node, as well as Visual Studio and Atom via RDP
 
 Enter the following play definition into bigip-node.yml:
-
+```
 ---
 
 - name: BIG-IP SETUP
@@ -501,7 +505,7 @@ Enter the following play definition into bigip-node.yml:
       name: "{{hostvars[item].inventory_hostname}}"
 
     loop: "{{ groups['web'] }}"
-
+```
 -   The --- at the top of the file indicates that this is a YAML file.
 
 -   The hosts: lb, indicates the play is run only on the lb group. Technically there only one F5 device but if there were multiple they would be configured simultaneously.
@@ -533,11 +537,11 @@ Enter the following play definition into bigip-node.yml:
 -   loop: tells the task to loop over the provided list. The list in this case is the group web which includes two RHEL hosts.
 
 Run the playbook - exit back into the command line of the control host and execute the following:
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-node.yml
-
+```
 The output will look as follows.
-
+```
 [student1@ansible]$ ansible-playbook bigip-node.yml
 
 PLAY [BIG-IP SETUP] ************************************************************
@@ -551,7 +555,7 @@ changed: [f5] => (item=node2)
 PLAY RECAP *********************************************************************
 
 f5 : ok=1    changed=1    unreachable=0    failed=0
-
+```
 Confirm that you can see the nodes added in F5 by logging in to F5 via the web interface:
 
 ![](https://lh4.googleusercontent.com/X5RvMqmwzDN-_Juj52jO870oHilI-Gq8aixf9zGF_9LSOeBP0yuQIMe0AM21hikZRhmKIiuzCcD_pZBSBoPLH_daGLiJoLoyyG8fj7haAF2myFSXuiJa8M3-5xq6EdJJcEIg19AD)
@@ -559,7 +563,7 @@ Confirm that you can see the nodes added in F5 by logging in to F5 via the web i
 #### Step 3 - Create a pool and add members
 
 Enter the following play definition into bigip-pool.yml:
-
+```
 ---
 
 - name: BIG-IP SETUP
@@ -595,7 +599,7 @@ Enter the following play definition into bigip-pool.yml:
       monitors: "/Common/http"
 
       monitor_type: "and_list"
-
+```
 -   The --- at the top of the file indicates that this is a YAML file.
 
 -   The hosts: lb, indicates the play is run only on the lb group. Technically there only one F5 device but if there were multiple they would be configured simultaneously.
@@ -629,11 +633,11 @@ Enter the following play definition into bigip-pool.yml:
 -   The validate_certs: "no" parameter tells the module to not validate SSL certificates. This is just used for demonstration purposes since this is a lab.
 
 Run the playbook - exit back into the command line of the control host and execute the following:
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-pool.yml
-
+```
 The output will look as follows.
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-pool.yml
 
 PLAY [BIG-IP SETUP] ************************************************************
@@ -689,7 +693,7 @@ Enter the following play definition into bigip-pool-members.yml:
       pool: "http_pool"
 
     loop: "{{ groups['web'] }}"
-
+```
 -   The --- at the top of the file indicates that this is a YAML file.
 
 -   The hosts: lb, indicates the play is run only on the lb group. Technically there only one F5 device but if there were multiple they would be configured simultaneously.
@@ -727,11 +731,11 @@ Enter the following play definition into bigip-pool-members.yml:
 -   loop: tells the task to loop over the provided list. The list in this case is the group web which includes two RHEL hosts.
 
 Run the playbook - exit back into the command line of the control host and execute the following:
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-pool-members.yml
-
+```
 The output will look as follows.
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-pool-members.yml
 
 PLAY [BIG-IP SETUP] ************************************************************
@@ -745,7 +749,7 @@ changed: [f5] => (item=host2)
 PLAY RECAP *********************************************************************
 
 f5 : ok=1    changed=1    unreachable=0    failed=0
-
+```
 Confirm that you see the new pool created and its members by logging in to your F5 load balancer web interface.
 
 ![](https://lh3.googleusercontent.com/uTrq9zCI_EM6g16NbauJNxKdIAP2mBRSqp7TWJTl6pAOP5bSAl27NvtUW99g6E8tGkpggfiUoi892K2mCslioEkS2qM7zGecxskPE2J6G5eFg8peGwL1xMlaKpkXWU9ppulTAb3G)
@@ -759,7 +763,7 @@ A virtual server in F5 load balancer is a combination of IP and port number. Whe
 Now let's create a virtual server.
 
 Enter the following play definition into bigip-virtual-server.yml:
-
+```
 ---
 
 - name: BIG-IP SETUP
@@ -801,7 +805,7 @@ Enter the following play definition into bigip-virtual-server.yml:
       pool: "http_pool"
 
       snat: "Automap"
-
+```
 -   The --- at the top of the file indicates that this is a YAML file.
 
 -   The hosts: f5, indicates the play is run only on the F5 BIG-IP device
@@ -841,7 +845,7 @@ Enter the following play definition into bigip-virtual-server.yml:
 -   The validate_certs: "no" parameter tells the module to not validate SSL certificates. This is just used for demonstration purposes since this is a lab.
 
 Run the playbook - exit back into the command line of the control host and execute the following:
-
+```
 [student1@ansible ~]$ ansible-playbook bigip-virtual-server.yml
 
 [student1@ansible]$ ansible-playbook bigip-virtual-server.yml
@@ -855,7 +859,7 @@ changed: [f5]
 PLAY RECAP *********************************************************************
 
 f5 : ok=1    changed=1    unreachable=0    failed=0
-
+```
 Confirm that you see the new virtual server in F5:
 
 ![](https://lh6.googleusercontent.com/Gc60uP1hTk2T-M4oMyuvQ_idl3Y5zCmXt_jlc1BCoDvXFHCmHlI62kytLxBeyMfGkEzrj8Z2aozLkhVDCooskvIJbrGAcNrU4VehcImTltP4a0Vo_kKTiQ3cYi4t4to8i6QSxRGA)
@@ -869,7 +873,7 @@ This time use port 443 instead of 8443, e.g. [https://X.X.X.X:443/](https://x.x.
 Each time you refresh the host will change between node1 and node2. Here is animation of the host field changing: ![animation](https://lh4.googleusercontent.com/M6cMaFmTKMh6JjGQ1dR7LrSy3WNR1H1XHdqCYvSx8S9aa9KE9EBi_peizZxQbk76dYPi1AkXa8LaCs6d4Gf0qbxSaiYZ227WOIEgraaAXr9-KruVpmlDZgDFEFn70dnqPRWhUCwv)
 
 Instead of using a browser window it is also possible to use the command line on the Ansible control node. Use the curl command on the ansible_host to access public IP or private IP address of F5 load balancer in combination with the --insecure and --silent command line arguments. Since the entire website is loaded on the command line it is recommended to | grep for the student number assigned to the respective workbench. (e.g. student5 would | grep student5)
-
+```
 [studentX@ansible ~]$ curl https://172.16.26.136:443 --insecure --silent | grep studentX
 
     <p>F5TEST-studentX-node1</p>
@@ -881,3 +885,4 @@ Instead of using a browser window it is also possible to use the command line on
 [studentX@ansible ~]$ curl https://172.16.26.136:443 --insecure --silent | grep studentX
 
     <p>F5TEST-studentX-node1</p>
+```
