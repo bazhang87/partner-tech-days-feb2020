@@ -61,7 +61,7 @@ Navigate to the home directory.
 #### Step 2
 
 Run the ansible command with the --version command to look at what is configured:
-
+```
 [student1@ansible ~]$ ansible --version
 
 ansible 2.6.2
@@ -75,7 +75,7 @@ ansible 2.6.2
   executable location = /usr/bin/ansible
 
   python version = 2.7.5 (default, May  3 2017, 07:55:04) [GCC 4.8.5 20150623 (Red Hat 4.8.5-14)]
-
+```
 Note: The Ansible version you see might differ from the above output
 
 This command gives you information about the version of Ansible, location of the executable, version of Python, search path for the modules and location of the ansible configuration file.
