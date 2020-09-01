@@ -84,7 +84,7 @@ This command gives you information about the version of Ansible, location of the
 
 Use the cat command to view the contents of the ansible.cfg file.
 
-[student1@ansible ~]$ cat ~/.ansible.cfg
+'''[student1@ansible ~]$ cat ~/.ansible.cfg
 
 [defaults]
 
@@ -108,7 +108,7 @@ connect_timeout = 200
 
 command_timeout = 200
 
-[student1@ansible ~]$
+[student1@ansible ~]$'''
 
 Note the following parameters within the ansible.cfg file:
 
@@ -120,11 +120,11 @@ The scope of a play within a playbook is limited to the groups of hosts declared
 
 In this lab you will work with a file based inventory written in the ini format. Use the cat command to view the contents of your inventory:
 
-[student1@ansible ~]$ cat ~/lab_inventory/hosts
+'''[student1@ansible ~]$ cat ~/lab_inventory/hosts'''
 
 The output will look as follows with student2 being the respective student workbench:
 
-node3 ansible_host=54.152.203.104 ansible_user=ec2-user private_ip=172.16.182.197
+'''node3 ansible_host=54.152.203.104 ansible_user=ec2-user private_ip=172.16.182.197
 
 node4 ansible_host=100.25.219.137 ansible_user=ec2-user private_ip=172.16.247.51
 
@@ -148,7 +148,7 @@ ansible ansible_host=107.23.192.217 ansible_user=ec2-user private_ip=172.16.207.
 
 host1 ansible_host=107.22.141.4 ansible_user=ec2-user private_ip=172.16.170.190
 
-host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13
+host2 ansible_host=54.146.162.192 ansible_user=ec2-user private_ip=172.16.160.13'''
 
 Note that the IP addresses will be different in your environment. Notice that node3 and node4 are not in the web group. We will use node3 and node4 in later exercises.
 
@@ -194,6 +194,7 @@ Ansible playbooks are YAML files. YAML is a structured encoding format that is a
 
 Enter the following play definition into bigip-facts.yml:
 
+'''
 ---
 
 - name: GRAB F5 FACTS
@@ -288,16 +289,17 @@ Finally let's append two more tasks to get more specific info from facts gathere
 
 -   var: device_facts['system_info']['base_mac_address'] displays the MAC address for the Management IP on the BIG-IP device
 
--   device_facts['system_info']['product_version'] displays the product version BIG-IP device
+-   device_facts['system_info']['product_version'] displays the product version BIG-IP device'''
 
 Because the bigip_device_info module returns useful information in structured data, it is really easy to grab specific information without using regex or filters. Fact modules are very powerful tools to grab specific device information that can be used in subsequent tasks, or even used to create dynamic documentation (reports, csv files, markdown).
 
 Run the playbook - exit back into the command line of the control host and execute the following:
 
-[student1@ansible ~]$ ansible-playbook bigip-facts.yml
+'''[student1@ansible ~]$ ansible-playbook bigip-facts.yml'''
 
 The output will look as follows.
 
+'''
 {% raw %}
 
 [student1@ansible ~]$ ansible-playbook bigip-facts.yml
@@ -446,13 +448,13 @@ ok: [f5] => {
 
 PLAY RECAP **************************************************************************************************************************************************
 
-f5 : ok=4    changed=1    unreachable=0    failed=0
+f5 : ok=4    changed=1    unreachable=0    failed=0'''
 
 And finally, please confirm that you have web access to your F5 load balancer. You can find its details in your Ansible inventory file. For example, for the entry below, you would go to [https://34.199.128.69:8443](http://34.199.128.69:8443) (the web interface listens to port 8443), username is admin, password is admin
-
+'''
 [lb]
 
-f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin
+f5 ansible_host=34.199.128.69 ansible_user=admin private_ip=172.16.26.136 ansible_ssh_pass=admin'''
 
 #### Step 2 - Add nodes
 
