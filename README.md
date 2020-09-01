@@ -55,9 +55,9 @@ Objective: A quick introduction to Ansible command line for students with no exp
 #### Step 1
 
 Navigate to the home directory.
-
+```
 [student1@ansible ~]$
-
+```
 #### Step 2
 
 Run the ansible command with the --version command to look at what is configured:
